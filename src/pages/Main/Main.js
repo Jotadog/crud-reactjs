@@ -43,9 +43,11 @@ class Main extends Component {
         this.loadRecords();
     }
 
-    // componentDidUpdate() {
-    //     this.loadRecords();
-    // }
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.refresh !== prevState.refresh) {
+            this.loadRecords(this.state.page);
+        }
+    }
 
     loadRecords(page = 1) {
         Axios.get(`http://127.0.0.1:3001/api/profiles?page=${page}`)
@@ -54,7 +56,8 @@ class Main extends Component {
                 this.setState({
                     records: docs,
                     info,
-                    page
+                    page,
+                    refresh: false
                 })
             })
             .catch(console.log);
@@ -62,8 +65,7 @@ class Main extends Component {
 
     render() {
 
-        const { records, page } = this.state;
-
+        const { records, info: { totalPages }, page } = this.state;
         return (
             <Fragment>
                 <Header />
@@ -75,9 +77,9 @@ class Main extends Component {
                                 <b>Records</b>: page {this.state.page}
                             </div>
                             <div>
-                                <button className='btn btn-info' onClick={this.previousPage}><i className='fas fa-chevron-left'></i></button>
+                                <button disabled={page === 1} className='btn btn-info' onClick={this.previousPage}><i className='fas fa-chevron-left'></i></button>
                                 &nbsp;
-                            <button className='btn btn-info' onClick={this.nextPage}><i className='fas fa-chevron-right'></i></button>
+                            <button disabled={page >= totalPages} className='btn btn-info' onClick={this.nextPage}><i className='fas fa-chevron-right'></i></button>
                             </div>
                         </div>
                         <div className="card-body">

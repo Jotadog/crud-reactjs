@@ -15,7 +15,6 @@ class TableRow extends Component {
     }
 
     delete = () => {
-        alert(this.state.id);
         Axios.delete(`http://localhost:3001/api/profiles/${this.state.id}`)
             .catch(console.log);
     }
