@@ -7,15 +7,13 @@ class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: {
-                firstName: '',
-                lastName: '',
-                honorific: 'Mr',
-                email: '',
-                phone: '',
-                password: '',
-                confirmPassword: '',
-            },
+            firstName: '',
+            lastName: '',
+            honorific: 'Mr.',
+            email: '',
+            phone: '',
+            password: '',
+            confirmPassword: '',
             message: false
         };
 
@@ -23,11 +21,8 @@ class Register extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    addMessage = () => {
+    message = () => {
         this.setState({ message: true });
-    }
-
-    removeMessage = () => {
         setTimeout(function () {
             this.setState({ message: false });
         }.bind(this), 2000);
@@ -35,22 +30,19 @@ class Register extends Component {
 
     handleChange(event) {
         this.setState({
-            data: {
-                [event.target.name]: event.target.value
-            }
+            [event.target.name]: event.target.value
         });
     }
 
     store = () => {
-        Axios.post('http://localhost:3001/api/profiles', this.state.data)
+        Axios.post('http://localhost:3001/api/profiles', this.state)
             .catch(console.log);
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        this.addMessage();
+        this.message();
         this.store();
-        this.removeMessage();
     }
 
     render() {
@@ -60,56 +52,55 @@ class Register extends Component {
                 <div className='container'>
                     <br />
                     <h1>Register profile</h1>
+                    {
+                        this.state.message ?
+                            <Fragment>
+                                <div class="alert alert-success fixed-bottom" role="alert">Registered!</div>
+                            </Fragment>
+                            :
+                            <div></div>
+                    }
                     <br />
                     <form onSubmit={this.handleSubmit}>
                         <div className='row'>
                             <div className="form-group col-2">
                                 <label htmlFor="honorific">Honorific</label>
-                                <select name='honorific' className="form-control" id="honorific" onChange={this.handleChange}>
-                                    <option value='Mr'>Mr.</option>
-                                    <option value='Ms'>Ms.</option>
+                                <select value={this.state.honorific} name='honorific' className="form-control shadow-sm" id="honorific" onChange={this.handleChange}>
+                                    <option value='Mr.'>Mr.</option>
+                                    <option value='Ms.'>Ms.</option>
                                 </select>
                             </div>
                             <div className="form-group col-5">
                                 <label htmlFor="firstName">First name</label>
-                                <input type="text" className="form-control" id="firstName" name='firstName' value={this.state.data.firstName} placeholder="First name" onChange={this.handleChange} />
+                                <input type="text" className="form-control shadow-sm" id="firstName" name='firstName' value={this.state.firstName} placeholder="First name" onChange={this.handleChange} />
                             </div>
                             <div className="form-group col-5">
                                 <label htmlFor="lastName">Last name</label>
-                                <input type="text" className="form-control" id="lastName" name="lastName" value={this.state.data.lastName} placeholder="Last name" onChange={this.handleChange} />
+                                <input type="text" className="form-control shadow-sm" id="lastName" name="lastName" value={this.state.lastName} placeholder="Last name" onChange={this.handleChange} />
                             </div>
                         </div>
                         <div className='row'>
                             <div className='form-group col 6'>
                                 <label htmlFor='email'>E-mail</label>
-                                <input type="email" className="form-control" id="email" name="email" value={this.state.data.email} placeholder="E-mail" onChange={this.handleChange} />
+                                <input type="email" className="form-control shadow-sm" id="email" name="email" value={this.state.email} placeholder="E-mail" onChange={this.handleChange} />
                             </div>
                             <div className='form-group col 6'>
                                 <label htmlFor='phone'>Phone</label>
-                                <input type="text" className="form-control" id="phone" name="phone" value={this.state.data.phone} placeholder="Phone" onChange={this.handleChange} />
+                                <input type="text" className="form-control shadow-sm" id="phone" name="phone" value={this.state.phone} placeholder="Phone" onChange={this.handleChange} />
                             </div>
                         </div>
                         <div className='row'>
                             <div className='form-group col 6'>
                                 <label htmlFor='password'>Password</label>
-                                <input type="password" className="form-control" id="password" name="password" value={this.state.data.password} placeholder="Password" onChange={this.handleChange} />
+                                <input type="password" className="form-control shadow-sm" id="password" name="password" value={this.state.password} placeholder="Password" onChange={this.handleChange} />
                             </div>
                             <div className='form-group col 6'>
                                 <label htmlFor='confirmPassword'>Confirm password</label>
-                                <input type="password" className="form-control" id="confirmPassword" name="confirmPassword" value={this.state.data.confirmPassword} placeholder="Confirm password" onChange={this.handleChange} />
+                                <input type="password" className="form-control shadow-sm" id="confirmPassword" name="confirmPassword" value={this.state.confirmPassword} placeholder="Confirm password" onChange={this.handleChange} />
                             </div>
                         </div>
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </form>
-                    {
-                        this.state.message ?
-                            <Fragment>
-                                <br />
-                                <h5 className='text-success'>Registered</h5>
-                            </Fragment>
-                            :
-                            <div></div>
-                    }
                 </div>
             </Fragment >
         );
